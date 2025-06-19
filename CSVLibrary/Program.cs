@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,15 +31,23 @@ namespace CSVLibrary
             Student student1 = new Student();
             Student student2 = new Student();
             student1.Id = "001";
-            student2.Id = "002";
             student1.Name = "學生1號";
-            student2.Name = "學生2號";
             student1.Gender = "男";
-            student2.Gender = "女";
+            student1.Age = "0";
+            student1.Weight = "100";
+            student1.Height = "100";
+            student1.Grade = "S";
 
-            CSVHelper.Write(@"C:\Users\User\source\repos\CSVLibrary\data.csv", student1, true);
-            CSVHelper.Write(@"C:\Users\User\source\repos\CSVLibrary\data.csv", student2, true);
+            // CSVHelper.Write<Student>(@"C:\Users\User\source\repos\CSVLibrary\data.csv", student1, true);
 
+            List<StudentPhysicalData> students = CSVHelper.Read<StudentPhysicalData>(@"C:\Users\User\source\repos\CSVLibrary\data.csv");
+            foreach (StudentPhysicalData student in students)
+            {
+                Console.WriteLine(JsonConvert.SerializeObject(student));
+            }
+
+            Console.ReadKey();
+            // Console.WriteLine(CSVHelper.Read<StudentPhysicalData>(@"C:\Users\User\source\repos\CSVLibrary\data.csv"));
             //寫入
             //RecordModel model = new RecordModel(xx,xxx,xxxx);
             //CSVHelper.Write<RecordModel>(model);
