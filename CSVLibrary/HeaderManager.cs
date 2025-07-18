@@ -39,6 +39,8 @@ namespace CSVLibrary
 
         public static string HeadersCheck(string filePath, Type type)
         {
+            if (!File.Exists(filePath))
+                return "";
             StreamReader streamReader = new StreamReader(filePath);
             string data = streamReader.ReadLine();
             string[] headers = type.GetProperties().Select(x => x.Name).ToArray();
@@ -56,6 +58,7 @@ namespace CSVLibrary
 
         public static FileWriteInStrategy CheckWriteInType<T>(string filePath) where T : class, new()
         {
+
             // 取得第一筆資料
             string headerInRawData = HeadersCheck(filePath, typeof(T));
             //當沒有資料就代表檔案是空白的

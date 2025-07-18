@@ -12,14 +12,14 @@ using System.Threading.Tasks;
 // ORM object relection mapping
 namespace CSVLibrary
 {
-    internal class CSVHelper
+    public class CSVHelper
     {
         //C:\Users\User\source\repos\CSVLibrary\data.exe
         public static List<T> Read<T>(string filePath) where T : class, new()
         {             // 這裡的T是新創的類別，只拿你要的資料
             if (!File.Exists(filePath))
             {
-                throw new FileNotFoundException("路徑不存在，找不到指定的檔案。");
+                return new List<T>();
             }
 
             string fExtension = filePath.Split('.').Last();
@@ -42,13 +42,14 @@ namespace CSVLibrary
 
             while (!streamReader.EndOfStream)
             {
+                string dataLine = streamReader.ReadLine();
                 // 先把第一筆挑掉
-                if (streamReader.ReadLine() == header)
+                if (dataLine == header)
                     continue;
 
                 T data = new T();
                 PropertyInfo[] properties = data.GetType().GetProperties();
-                string[] lineDatas = streamReader.ReadLine().Split(',');
+                string[] lineDatas = dataLine.Split(',');
 
 
                 foreach (PropertyInfo property in properties)
@@ -91,5 +92,13 @@ namespace CSVLibrary
             AWriteData aWriteData = (AWriteData)Activator.CreateInstance(type);
             aWriteData.Write(filePath, t);
         }
+        public static void Write<T>(string filePath, List<T> datas, bool append) where T : class, new()
+        {
+            foreach (var data in datas)
+            {
+                Write(filePath, data, append);
+            }
+        }
+
     }
 }
