@@ -8,6 +8,6 @@ namespace CSVLibrary.Strategies
 {
     internal abstract class AWriteData
     {
-        public abstract void Write<T>(string filePath, T t);
+        public abstract void Write<T>(string filePath, List<T> t);
     }
 }

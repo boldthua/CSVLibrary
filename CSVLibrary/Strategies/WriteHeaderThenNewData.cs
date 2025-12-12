@@ -10,17 +10,17 @@ namespace CSVLibrary.Strategies
 {
     internal class WriteHeaderThenNewData : AWriteData
     {
-        public override void Write<T>(string filePath, T t)
+        public override void Write<T>(string filePath, List<T> t)
         {
+            StreamWriter SW = new StreamWriter(filePath, false);
             PropertyInfo[] Tproperties = typeof(T).GetProperties();
             string writeIn = String.Join(",", Tproperties.Select(x => x.Name));
-
-            string data = string.Join(",", t.GetType().GetProperties().Select(x => x.GetValue(t)));
-
-            StreamWriter SW = new StreamWriter(filePath, false);
             SW.WriteLine(String.Join(",", writeIn));
-
-            SW.WriteLine(data);
+            foreach (T minT in t)
+            {
+                string data = string.Join(",", minT.GetType().GetProperties().Select(x => x.GetValue(minT)));
+                SW.WriteLine(data);
+            }
             SW.Flush();
             SW.Close();
         }
